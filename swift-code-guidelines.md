@@ -1,7 +1,7 @@
 # Coding style guidelines for Swift
-The main purpose of these guidelines is to improve code quality and readability, and to reduce the time we spend in code review by creating standard rules about code style.
+The main purpose of these guidelines is to improve code quality and readability, and to reduce the time we spend in code review by creating standard rules about coding style.
 
- Because these Coding style guidelines follow [Swift API Design Guidelines](https://swift.org/documentation/api-design-guidelines/ "Swift API Design Guidelines"), Etermax developers should read those Official Guidelines first in order to understand the specifics goals of Swift as a programming language. In addition to the more detailed remarks in those official rules, these Coding Style Guidelines make complimentary remarks and specific requirements that guide our work as developers.
+ Because these Coding style guidelines follow [Swift API Design Guidelines](https://swift.org/documentation/api-design-guidelines/ "Swift API Design Guidelines"), Etermax developers should read those Official Guidelines first in order to understand the specifics goals of Swift as a programming language. In addition to the more detailed remarks on those official rules, these Coding Style Guidelines make complimentary remarks and specific requirements that guide our work as developers.
 
 
 # Table of contents
@@ -33,13 +33,11 @@ The main purpose of these guidelines is to improve code quality and readability,
 **Not recommended:**
 ```swift
 tutotial
-dissappearedView
 retreivedInformation()
-AccesibilityViewController
 ```
 * Use American English. Example: color, not colour.
 
-* Avoid using obscure, uncommon or ambiguous definitions. Don't use variables such as ``detachedCondo`` if you want to define ``house``, for example. Nevertheless, you can use these uncommon definitions if they are related to the app’s business rules.
+* Avoid using obscure, uncommon or ambiguous definitions. Nevertheless, you can use these uncommon definitions if they are related to the app’s business rules.
 
 * Use sufficient words to define a certain variable, method or class. Useful verbosity is better than ambiguity.
 
@@ -47,7 +45,6 @@ Recommended | Not recommended
 --- |---
 ``limitedFacebookIDs`` | ``limited50FBIds``
 ``limitedFriends`` | ``limited50Arr``
-``removeAtIndex(1)`` | ``remove(1)``
 
 * Use one word to define same concept, object or behavior in the project. If you are using ``get`` to name a method that returns certain object or information, you cannot use ``retrieve`` and ``fetch`` to name other methods with same behavior. Example: ``remove`` and ``delete``.
 
@@ -58,7 +55,6 @@ Recommended | Not recommended
 ``repeatedPassword`` | ``repeatedPass or rptPass``
 ``userInfo`` | ``userInf``
 ``error`` | ``err``
-``placeDescription`` | ``placeDesc``
 
 * Use acronyms uniformly upper- or lower-cased according to its position in a variable or method. If the acronym is at the beginning of a variable or method, it should be lower-cased. In every other case, it should be upper-cased.
 
@@ -77,8 +73,6 @@ Recommended | Not recommended
 
 
 ## 1.2. Variables <a name="Variables"></a>
-
-* Use nouns to define variables, not verbs.
 
 * Use ``lowerCamelCase`` naming convention to define your variables and properties. It includes all the constants that are created.
 
@@ -103,21 +97,20 @@ Recommended | Not recommended
 ``errorDescription`` | ``error (String)``
 ``tableView``, ``headerView``  |  
 
-* Use boolean methods and properties as assertions about the receiver.
+* Use booleans as assertions about the receiver.
 
 Recommended | Not recommended
 --- |---
-``view.isHidden()`` | ``view.hidden()``
-``self.isWIFIAvailable()`` | ``self.wifiAvailable()``
+``view.isHidden`` | ``view.hidden``
+``self.isWIFIAvailable`` | ``self.wifiAvailable``
 
 ## 1.3. Functions <a name="Functions"></a>
 
-* Use English phrases to make a functions more readable.
+* Use English phrases to make functions more readable.
 
 Recommended | Not recommended
 --- |---
 ``clearAnswers()``| ``answersClean()``
-
 
 * Use "make" as beginning of names of factory methods. The first parameters should be included in function name.
 
@@ -131,9 +124,7 @@ Recommended |  Not recommended:
 
 Recommended |  Not recommended:
 --- | ---
-remove(student) | removeStudent(student)
-remove(student, at: classroom) | removeStudent(student, classroom: classroom)
-minimumGRE(student1, student2) | minimumGRE(studentOne: student1, studentTwo: student2)
+remove(student, from: classroom) | removeStudent(student, classroom: classroom)
 
 ## 1.4. Classes <a name="Classes"></a>
 
@@ -147,13 +138,7 @@ minimumGRE(student1, student2) | minimumGRE(studentOne: student1, studentTwo: st
 
 * Use ``CamelCase`` naming convention to name a protocol.
 
-* Avoid including ``Protocol`` (or ``Delegate``) in the protocol name.
-
-Recommended | Not recommended
---- |---
-``clearAnswers()``| ``ReloginDelegate``
-
-* Use nouns to define a protocol, if this protocol defines what an object is (or can be). Example: ``TableViewDataSource`` or ``RandomAccessCollection``.
+* Avoid including ``Protocol`` in the protocol name. You can use nouns to define a protocol, if this protocol defines what an object is (or can be). Example: ``TableViewDataSource`` or ``RandomAccessCollection``.
 
 * Use suffixes ``-able``, ``-ible``, or ``-ing`` (Example: ``Equatable``, ``Mappable``, ``Processing``) to describe a protocol capability.
 
@@ -163,6 +148,8 @@ Recommended | Not recommended
 
 * Use ``let``over ``var``.
 
+* Avoid declaring types for constants or variables if they can be inferred. Exceptions: When you are declaring ``CGFloat`` or dictionaries to use in a ``NSConstraintLayout.visualFormat`` method.
+
 * Use shortcut versions of type declarations instead of the full generic syntax.
 
 Recommended | Not recommended
@@ -171,25 +158,111 @@ var students: [Student] | var students: Array<Student>
 
 * Delete every piece of dead code in your classes, even when they are automatically created methods by Xcode, such as didReceiveMemoryWarning() method.
 
+* Use lazy initialization (instead of blocks) for better control over object lifetime.
+
+* Use ``structs`` to create an object by default. If an ``struct`` is no longer useful for your purposes, then change it to a ``class``.
+
+* To declare an array, use:
+
+``var students: [Student] = []``
+
+instead of:
+
+``var students = [Student]()``
+
+* To declare an dicionary, use:
+
+``var dicionary: [String: Student] = [:]``
+
+instead of:
+
+``var dicionary = [String: Student]()``
+
+* Use ``[weak self]`` (instead of ``[unowned self]``) and ``guard let strongSelf = self else { return }`` form.
+
+* Avoid using ``get`` clause when you are creating a read-only computed property. 
+
+**Recommended:**
+```swift
+var greeting: String {
+  return "Hello \(name)!"
+}
+```
+
+**Not recommended:**
+```swift
+var greeting: String {
+  get {
+  	return "Hello \(name)!"
+  }
+}
+```
+
 ## 2.2. Optionals<a name="Optionals"></a>
 
-* Avoid using force unwrapping, ``as!`` and ``try!``.Use implicitly unwrapped optionals only with ``@IBOutlets``. In other cases, use a non-optional or regular optional properties.
+* Use optionals by default. 
+
+* Avoid using force unwrapping, ``as!`` and ``try!``. 
+
+* Declare optionals as ``weak`` variables.
 
 * Check optional values against nil, when you are not going to use the value stored in this optional.
 
 * Use the same name for the unwrapped constant or variable.
 
+
 ## 2.3. Using ``guard``<a name="UsingGuard"></a>
 
 * Use ``guard`` as early return, instead of a ``if-else``.
 
-## 2.4. Functions<a name="FunctionsStyle"></a>
+* Avoid using ``unwrapped`` prefix in order to declare the new variable in a guard statement. You can use the same variable name that you are unwrapping.
 
-* Avoid including more than four arguments in a function. If more arguments are needed, analyze possibility of creating an object.
 
-## 2.5. Using ``.map()``, ``.flatMap()`` and ``.filter()``<a name="UsingMap"></a>
+**Recommended:**
+```swift
+guard let name = name {
+	...
+}
+```
 
-* Use ``.map()``, ``.flatMap()`` and ``.filter()`` to iterate a collection and to transform it into another one.
+**Not recommended:**
+```swift
+guard let unwrappedName = name {
+	...
+}
+```
+
+* Use ``return``, ``throw``, ``break``, ``continue`` and ``fatalError()`` to exit guard statement. 
+
+
+## 2.4. Closures
+
+* Use descriptive names for closure parameters.
+
+* Use ``(Void) ->`` instead of ``() ->``, to indicate that the closure don't return anything.
+
+* Use ``typealias`` to give an alternative name to a closure definition. I would be easy to read and understand, if you name it clearly.
+
+``typealias MyFunctionDefinition = (Integer, String) -> Void``
+
+* Use trailing closure syntax when there's a single closure expression parameter at the end. 
+
+* Avoid using types of the parameters if they are obvious or easily inferred.
+
+
+## 2.5. Functions<a name="FunctionsStyle"></a>
+
+* Use default values to simplify function calls.
+
+* Avoid including too many arguments in a function. If more arguments are needed, analyze possibility of creating an object.
+
+* Use ``static``, not ``class`` when you are declaring a function or property that is associated with a class as opposed to an instance of that class.
+
+
+## 2.6. Using ``.map()``, ``.flatMap()`` and ``.filter()``<a name="UsingMap"></a>
+
+* Use ``.map()``, ``.flatMap()`` and ``.filter()`` to iterate a collection and to transform it into another one. Avoid using for-in for this purpose.
+
 
 # 3. Organization and Code Formatting<a name="Organization"></a>
 
@@ -199,7 +272,7 @@ var students: [Student] | var students: Array<Student>
 
 ## 3.2. Marks <a name="Marks"></a>
 
-* Use MARK to separate different sections in a class, if necessary to make code more readable.
+* You can use MARK to separate different sections in a class, if necessary to make code more readable.
 
 Mark type | Usage
 --- |---
@@ -207,7 +280,7 @@ Mark type | Usage
 // MARK: Subtitle  |	Use it to create a subtitle to separate a section.
 // MARK:- Subtitle  | Use it to create a subtitle and a single line to separate a section.
 
-* Use ``//TODO`` and ``//FIXME`` to indicate technical debt or future refactor. Remember that both are just temporary measures and both marks must be deleted after resolving the issue. Leaving messages like these can mislead other developers in your team.
+* Avoid using ``//TODO`` and ``//FIXME`` to indicate technical debt or future refactor.
 
 ## 3.3. Documentation and Comments <a name="Comments"></a>
 
@@ -224,21 +297,25 @@ Mark type | Usage
 class AnswersViewController: UIViewController {
 }
 
-extension AnswersViewController: CompositionFormProtocol {
+extension AnswersViewController: CompositionFormDelegate {
 }
 ```
 
 **Not recommended:**
 ```swift
-class AnswersViewController: UIViewController, CompositionFormProtocol {
+class AnswersViewController: UIViewController, CompositionFormDelegate {
 }
 ```
 
 ## 3.5. Spacing and punctuation characters <a name="Spacing"></a>
 
-* Use tabs for indentation, not spaces.
+* Use 4 spaces for indentation, not tabs.
 
-* Use one space after punctuation characters ( . , : ) and first brackets.
+* Use an 100 line lengh/page guide. To set it, go to Xcode -> Preferences -> Text Editing.
+
+* Use one space on the right after punctuation characters ( . , : ) and first brackets. Exceptions: Ternary operator (? :), empty dictionary [:] and #selector syntax for unnamed parameters (_:).
+
+* Use one blank line between methods to improve visual clarity and organization. 
 
 * Use open method braces and other braces (``if/else/switch/while etc``) on the same line as the statement.
 
@@ -250,7 +327,8 @@ class AnswersViewController: UIViewController, CompositionFormProtocol {
 ```swift
 if index < currentIndex {
    direction = UIPageViewControllerNavigationDirection.Reverse
-} else {
+} 
+else {
    direction = UIPageViewControllerNavigationDirection.Forward
 }
 ```
@@ -259,7 +337,6 @@ if index < currentIndex {
 ```swift
 if (index < currentIndex) {
    direction = UIPageViewControllerNavigationDirection.Reverse;
-}
-else {
+} else {
    direction = UIPageViewControllerNavigationDirection.Forward}
 ```
